@@ -1,5 +1,7 @@
 from django.urls import path, include
+from .views import Accounts
 
+app_name = 'accounts'
 urlpatterns = [
-   path('', include('django.contrib.auth.urls')), 
+    path('account/', Accounts.as_view(), name='accounts'),
 ]
