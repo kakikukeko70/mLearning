@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if result %}
+    <p>Authentication succeeded.</p>
+    <p><a href="{% url 'login' %}">login</a></p>
+{% else %}
+    <p>this link is invalid</p>
+{% endif %}
 {% endblock %}
