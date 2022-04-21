@@ -1,6 +1,11 @@
-{{ user }}
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>{{ user }}</h3>
 {% if not user.is_authenticated %}
     <p><a href="{% url 'login' %}">login/signup</a></p>
 {% else %}
     <p><a href="{% url 'accounts:accounts' %}">accounts</a></p>
+    <p><a href="{% url 'main:todo' %}">edit todo list</a></p>
 {% endif %}
+{% endblock %}
