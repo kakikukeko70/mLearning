@@ -10,12 +10,13 @@ from .forms import SignUpForm, activate_user
 class Accounts(TemplateView):
     template_name = 'accounts/accounts.html'
 
-
 class SignUpView(CreateView):
     form_class = SignUpForm
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('accounts:verify')
     template_name = 'accounts/signup.html'
     
+class Verify(TemplateView):
+    template_name = 'accounts/verify.html'
     
 class ActivateView(TemplateView):
     template_name = "accounts/activate.html"

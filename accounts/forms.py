@@ -9,10 +9,10 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 User = get_user_model()
 
 
-subject = "登録確認"
+subject = "Your account is up and running!"
 message_template = """
-ご登録ありがとうございます。
-以下URLをクリックして登録を完了してください。
+We’d like to confirm that your account was created successfully. 
+To access, go to the link below.
 """
 
 
