@@ -3,8 +3,11 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.http import HttpResponse
-
-from .forms import SignUpForm, activate_user
+from django.shortcuts import get_object_or_404
+from .models import User
+from .forms import SignUpForm, activate_user, UserNameForm
+from django.http import HttpResponseRedirect 
+from django.urls import reverse
 
 # Create your views here.
 class Accounts(TemplateView):
@@ -24,3 +27,12 @@ class ActivateView(TemplateView):
     def get(self, request, uidb64, token, *args, **kwargs):
         result = activate_user(uidb64, token)
         return super().get(request, result=result, **kwargs)
+
+def change_username(request):
+    form = UserNameForm(request.POST)
+    if form.is_valid():
+        username = form.cleaned_data['username']
+        user = get_object_or_404(User, pk=request.user.id)
+        user.username = username
+        user.save()   
+        return HttpResponseRedirect(reverse('main:index'))
