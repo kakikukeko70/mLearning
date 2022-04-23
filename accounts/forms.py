@@ -5,9 +5,12 @@ from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes 
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django import forms
+
+class MemoForm(forms.Form):
+    content = forms.CharField(label='', widget=forms.Textarea())
 
 User = get_user_model()
-
 
 subject = "Your account is up and running!"
 message_template = """

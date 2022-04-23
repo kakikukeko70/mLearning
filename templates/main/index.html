@@ -2,10 +2,11 @@
 
 {% block content %}
 <h3>{{ user }}</h3>
-{% if not user.is_authenticated %}
-    <p><a href="{% url 'login' %}">login/signup</a></p>
-{% else %}
-    <p><a href="{% url 'accounts:accounts' %}">accounts</a></p>
-    <p><a href="{% url 'main:todo' %}">edit todo list</a></p>
-{% endif %}
+<form method="POST" action="{% url 'main:upload_memo' %}">
+    {% csrf_token %}
+    <textarea name='content' rows='10px' cols='40px' required id="id_content">{{ user.memo }}</textarea>
+    <button>update</button>
+</form>
+<p><a href="{% url 'accounts:accounts' %}">accounts</a></p>
+<p><a href="{% url 'main:todo' %}">edit todo list</a></p>
 {% endblock %}
