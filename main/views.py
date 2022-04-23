@@ -18,8 +18,7 @@ class TodoList(TemplateView):
     
 def upload_memo(request):
     form = MemoForm(request.POST)
-    is_valid = form.is_valid()
-    if is_valid:
+    if form.is_valid():
         content = form.cleaned_data['content']
         user = get_object_or_404(User, pk=request.user.id)
         user.memo = content
