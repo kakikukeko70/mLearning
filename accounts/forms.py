@@ -12,6 +12,9 @@ class MemoForm(forms.Form):
 
 User = get_user_model()
 
+class UserNameForm(forms.Form):
+    username = forms.CharField()
+
 subject = "Your account is up and running!"
 message_template = """
 We’d like to confirm that your account was created successfully. 
