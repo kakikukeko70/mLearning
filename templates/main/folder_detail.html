@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {{ bookmark_form }}
+    <select name="folder">
+        {% for folder in user.folder_set.all %}
+            <option value="{{ folder }}">{{ folder }}</option>
+        {% endfor %}
+    </select>
+    <button>save</button>
+</form>
+{% for bookmark in folder.bookmark_set.all %}
+    <p><a href="{{ bookmark.url }}">{{ bookmark }}</a></p>
+    <p><a href="{% url 'main:editbookmark' bookmark.id %}">edit</a></p>
+{% endfor %}
+{% endblock %}
