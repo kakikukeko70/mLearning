@@ -6,14 +6,25 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes 
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django import forms
+from .models import Bookmark, Folder
+
+User = get_user_model()
 
 class MemoForm(forms.Form):
     content = forms.CharField(label='', widget=forms.Textarea())
 
-User = get_user_model()
-
 class UserNameForm(forms.Form):
     username = forms.CharField()
+    
+class FolderForm(forms.ModelForm):
+    class Meta:
+        model = Folder
+        fields = ('name', )
+    
+class BookmarkForm(forms.ModelForm):
+    class Meta:
+        model = Bookmark
+        fields = ('name', 'url',)
 
 subject = "Your account is up and running!"
 message_template = """
