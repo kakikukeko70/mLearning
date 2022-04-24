@@ -4,13 +4,13 @@ from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from .models import User
-from .forms import SignUpForm, activate_user, UserNameForm
 from django.http import HttpResponseRedirect 
 from django.urls import reverse
+from .models import User
+from .forms import SignUpForm, activate_user, UserNameForm
 
 # Create your views here.
-class Accounts(TemplateView):
+class AccountView(TemplateView):
     template_name = 'accounts/accounts.html'
 
 class SignUpView(CreateView):
@@ -18,7 +18,7 @@ class SignUpView(CreateView):
     success_url = reverse_lazy('accounts:verify')
     template_name = 'accounts/signup.html'
     
-class Verify(TemplateView):
+class VerifyView(TemplateView):
     template_name = 'accounts/verify.html'
     
 class ActivateView(TemplateView):
