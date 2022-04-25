@@ -15,6 +15,9 @@ class MemoForm(forms.Form):
 
 class UserNameForm(forms.Form):
     username = forms.CharField()
+
+class BookmarkNameForm(forms.Form):
+    name = forms.CharField()
     
 class FolderForm(forms.ModelForm):
     class Meta:
