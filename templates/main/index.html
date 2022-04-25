@@ -7,7 +7,7 @@
     <textarea name='content' rows='10px' cols='40px' required id="id_content">{{ user.memo }}</textarea>
     <button>update</button>
 </form>
-<p><a href="{% url 'main:bookmarks' %}">bookmarks</a></p>
+<p><a href="{% url 'main:folders' %}">bookmark folders</a></p>
 <p><a href="{% url 'main:todo' %}">edit todo list</a></p>
 <p><a href="{% url 'accounts:accounts' %}">accounts</a></p>
 {% endblock %}
