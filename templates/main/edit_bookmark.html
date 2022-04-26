@@ -6,6 +6,7 @@
     <input type="text" name="name" value="{{ object }}" required="" id="id_name">
     <button>change name</button>
 </form>
+<br>
 <form method="POST" action="{% url 'main:change_folder' object.id %}">
     {% csrf_token %}
     <select name="folder">
@@ -15,5 +16,6 @@
     </select>
     <button>change folder</button>
 </form>
+<br>
 <button><a href="{% url 'main:delete_bookmark' object.id %}">delete</a></button>
 {% endblock %}
