@@ -41,7 +41,7 @@ class FolderView(TemplateView):
             folder = form.save(commit=False)
             folder.user = user
             folder.save()
-            return HttpResponseRedirect(reverse('main:bookmarks'))
+            return HttpResponseRedirect(reverse('main:folders'))
 
 class EditBookmark(DetailView):
     model = Bookmark
@@ -79,8 +79,8 @@ class FolderdetailView(DetailView):
     model = Folder
     template_name = 'main/folder_detail.html'
     
-    def post(self, request, **kwargs):
-        folder = Folder.objects.get(id=self.kwargs['pk'])
+    def add_bookmark(request, **kwargs):
+        folder = Folder.objects.get(id=kwargs['id'])
         user = User(pk=request.user.id)
         bookmark_form = BookmarkForm(request.POST)
         if bookmark_form.is_valid():
@@ -88,10 +88,25 @@ class FolderdetailView(DetailView):
             bookmark.user = user
             bookmark.folder = folder
             bookmark.save()
-            return HttpResponseRedirect(reverse('main:folderdetail', kwargs={'pk' : kwargs['pk']})) 
+            return HttpResponseRedirect(reverse('main:folderdetail', kwargs={'pk' : kwargs['id']})) 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['bookmark_form'] = BookmarkForm()
+        context['folder_form'] = FolderForm()
         context['bookmarks'] = Bookmark.objects.filter(user=self.request.user.id)
         return context
+    
+    def change_folder_name(request, **kwargs):
+        folder_form = FolderForm(request.POST)
+        if folder_form.is_valid():
+            folder = Folder.objects.get(id=kwargs['id'])
+            folder_name = folder_form.cleaned_data['name']
+            folder.name = folder_name
+            folder.save()
+            return HttpResponseRedirect(reverse('main:folderdetail', kwargs={'pk' : kwargs['id']})) 
+
+    def delete_folder(request, **kwargs):
+        folder = Folder.objects.get(id=kwargs['id'])
+        folder.delete()
+        return HttpResponseRedirect(reverse('main:folders'))
