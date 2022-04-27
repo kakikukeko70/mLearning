@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<fieldset>
+    <legend>edit folder</legend>
+    <form method="post" action="{% url 'main:change_folder_name' folder.id %}">
+        {% csrf_token %}
+       <input type="text" name='name' value="{{ folder }}" id="id_name"> 
+        <button>change name</button>
+    </form>
+    <br>
+    <button><a href="{% url 'main:delete_folder' folder.id %}">delete folder</a></button>
+</fieldset>
 <p>{{ folder }}</p>
-<form method="post" action="{% url 'main:change_folder_name' folder.id %}">
-    {% csrf_token %}
-   <input type="text" name='name' value="{{ folder }}" id="id_name"> 
-    <button>change name</button>
-</form>
-<br>
-<button><a href="{% url 'main:delete_folder' folder.id %}">delete folder</a></button>
-<br>
 <br>
 <form method="POST" action="{% url 'main:add_bookmark' folder.id %}">
     {% csrf_token %}

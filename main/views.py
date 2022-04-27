@@ -3,15 +3,16 @@ from django.views.generic import DetailView
 from django.urls import reverse
 from django.http import HttpResponseRedirect 
 from django.shortcuts import get_object_or_404
-from accounts.models import User, Bookmark, Folder
-from accounts.forms import MemoForm, BookmarkForm, FolderForm, BookmarkNameForm
+from accounts.models import User, Bookmark, Folder, Todo
+from accounts.forms import MemoForm, BookmarkForm, FolderForm, BookmarkNameForm, TodoForm
 
 class IndexView(TemplateView):
     template_name = 'main/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['memo_form'] = MemoForm() 
+        context['memo_form'] = MemoForm()
+        context['todo_form'] = TodoForm()
         return context
 
     def upload_memo(request):
@@ -22,6 +23,23 @@ class IndexView(TemplateView):
             user.memo = content
             user.save()
             return HttpResponseRedirect(reverse('main:index'))
+    
+    def add_todo(request):
+        todo_form = TodoForm(request.POST)
+        if todo_form.is_valid():
+            user = User.objects.get(pk=request.user.id)
+            todo = Todo.objects.create(text=todo_form.cleaned_data['text'], user=user)
+            return HttpResponseRedirect(reverse('main:index'))
+
+    def update_todo(request, **kwargs):
+       is_done = request.POST.get(f"is_done_{kwargs['pk']}")
+       todo = Todo.objects.get(pk=kwargs['pk'])
+       if is_done:
+           todo.done = True
+       else:
+           todo.done = False
+       todo.save()
+       return HttpResponseRedirect(reverse('main:index'))
 
 class TodoListView(TemplateView):
     template_name = 'main/todo.html'
