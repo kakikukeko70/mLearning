@@ -7,7 +7,32 @@
     <textarea name='content' rows='10px' cols='40px' required id="id_content">{{ user.memo }}</textarea>
     <button>update</button>
 </form>
+<br>
+<fieldset>
+    <form method="POST" action="{% url 'main:add_todo' %}">
+        {% csrf_token %}
+        <input type="text" name="text">
+        <button>add a task</button>
+    </form>
+    <br>
+    <fieldset>
+        {% for todo in user.todo_set.all %}
+            <form method="POST" action="{% url 'main:update_todo' todo.id %}">
+                {% csrf_token %}
+                <div>
+                    {% if todo.done %}
+                    <input type="checkbox" name="is_done_{{ todo.id }}" id="is_done_{{ todo.id }}" checked>
+                    {% else %}
+                    <input type="checkbox" name="is_done_{{ todo.id }}" id="is_done_{{ todo.id }}">
+                    {% endif %}
+                    <label for="is_done_{{ todo.id }}">{{ todo }}</label>    
+                    <button>update</button> 
+                </div>
+            </form>
+        {% endfor %}
+    </fieldset>
+</fieldset>
 <p><a href="{% url 'main:folders' %}">bookmark folders</a></p>
-<p><a href="{% url 'main:todo' %}">edit todo list</a></p>
+<p><a href="{% url 'main:todo' %}">edit todo</a></p>
 <p><a href="{% url 'accounts:accounts' %}">accounts</a></p>
 {% endblock %}
