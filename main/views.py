@@ -1,18 +1,20 @@
+from datetime import date
+
 from django.views.generic.base import TemplateView
 from django.views.generic import DetailView
 from django.urls import reverse
 from django.http import HttpResponseRedirect 
 from django.shortcuts import get_object_or_404
+
 from accounts.models import User, Bookmark, Folder, Todo
-from accounts.forms import MemoForm, BookmarkForm, FolderForm, BookmarkNameForm, TodoForm
+from accounts.forms import MemoForm, BookmarkForm, FolderForm, BookmarkNameForm, TodoForm 
 
 class IndexView(TemplateView):
     template_name = 'main/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['memo_form'] = MemoForm()
-        context['todo_form'] = TodoForm()
+        context['today'] = date.today().isoformat
         return context
 
     def upload_memo(request):
@@ -21,16 +23,16 @@ class IndexView(TemplateView):
             content = form.cleaned_data['content']
             user = get_object_or_404(User, pk=request.user.id)
             user.memo = content
-            user.save()
-            return HttpResponseRedirect(reverse('main:index'))
-    
-    def add_todo(request):
-        todo_form = TodoForm(request.POST)
-        if todo_form.is_valid():
-            user = User.objects.get(pk=request.user.id)
-            todo = Todo.objects.create(text=todo_form.cleaned_data['text'], user=user)
             return HttpResponseRedirect(reverse('main:index'))
 
+    def add_todo(request):
+        todo_form = TodoForm(request.POST) 
+        if todo_form.is_valid():
+            user = User.objects.get(pk=request.user.id)
+            todo = Todo.objects.create(text=todo_form.cleaned_data['text'], deadline=todo_form.cleaned_data['deadline'],
+ user=user)
+            return HttpResponseRedirect(reverse('main:index'))
+    
     def update_todo(request, **kwargs):
        is_done = request.POST.get(f"is_done_{kwargs['pk']}")
        todo = Todo.objects.get(pk=kwargs['pk'])
@@ -40,9 +42,6 @@ class IndexView(TemplateView):
            todo.done = False
        todo.save()
        return HttpResponseRedirect(reverse('main:index'))
-
-class TodoListView(TemplateView):
-    template_name = 'main/todo.html'
     
 class FolderView(TemplateView):
     template_name = 'main/folders.html'
@@ -128,3 +127,21 @@ class FolderdetailView(DetailView):
         folder = Folder.objects.get(id=kwargs['id'])
         folder.delete()
         return HttpResponseRedirect(reverse('main:folders'))
+
+class TodoListView(TemplateView):
+    template_name = 'main/todo.html'
+
+class TodoEditView(DetailView):
+    model = Todo
+    template_name = 'main/todo_edit.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['todo_edit_form'] = TodoForm()
+        return context
+    
+    def delete_todo(request, **kwargs):
+        print(kwargs)
+        todo = Todo.objects.get(pk=kwargs['pk'])
+        todo.delete()
+        return HttpResponseRedirect(reverse('main:todo'))

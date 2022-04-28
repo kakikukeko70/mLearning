@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import path, include
-from .views import IndexView, TodoListView, FolderView, EditBookmark, FolderdetailView
+from .views import IndexView, TodoListView, TodoEditView, FolderView, EditBookmark, FolderdetailView
 
 app_name='main'
 urlpatterns = [
@@ -8,7 +8,6 @@ urlpatterns = [
     path('upload_memo/', IndexView.upload_memo, name='upload_memo'),
     path('add_todo/', IndexView.add_todo, name='add_todo'),
     path('update_todo/<int:pk>', IndexView.update_todo, name='update_todo'),
-    path('todo/', TodoListView.as_view(), name='todo'),
     path('bookmark_folders/', FolderView.as_view(), name='folders'),
     path('create_folder/', FolderView.create_folder, name='create_folder'),
     path('edit_bookmark/<int:pk>/', EditBookmark.as_view(), name='editbookmark'),
@@ -19,4 +18,7 @@ urlpatterns = [
     path('add_bookmark/<int:id>', FolderdetailView.add_bookmark, name='add_bookmark'),
     path('change_foldername/<int:id>/', FolderdetailView.change_folder_name, name='change_folder_name'),
     path('delete_folder/<int:id>', FolderdetailView.delete_folder, name='delete_folder'),
+    path('todo/', TodoListView.as_view(), name='todo'),
+    path('todo_edit/<int:pk>/', TodoEditView.as_view(), name='todo_edit'),
+    path('delete_todo/<int:pk>/', TodoEditView.delete_todo, name='delete_todo'),
 ]

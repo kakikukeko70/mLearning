@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST" action="">
+    {% csrf_token %}
+    <input type="text" value="{{ todo }}" name="text_id" id="">
+    <input type="text" value="{{ todo.deadline }}" name="">
+<button>save</button>
+</form>
+<button><a href="{% url 'main:delete_todo' todo.pk %}">delete</a></button>
+{% endblock %}

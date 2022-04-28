@@ -11,7 +11,8 @@
 <fieldset>
     <form method="POST" action="{% url 'main:add_todo' %}">
         {% csrf_token %}
-        <input type="text" name="text">
+        <input type="text" name="text" placeholder="task">
+        <input type="text" name="deadline" placeholder="deadline"> (e.g {{ today }})
         <button>add a task</button>
     </form>
     <br>
@@ -25,7 +26,7 @@
                     {% else %}
                     <input type="checkbox" name="is_done_{{ todo.id }}" id="is_done_{{ todo.id }}">
                     {% endif %}
-                    <label for="is_done_{{ todo.id }}">{{ todo }}</label>    
+                    <label for="is_done_{{ todo.id }}">{{ todo }}({{ todo.deadline }})</label>    
                     <button>update</button> 
                 </div>
             </form>
