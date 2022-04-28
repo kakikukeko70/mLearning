@@ -25,6 +25,7 @@ class Todo(models.Model):
     text = models.CharField(max_length=20)
     done = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    deadline = models.DateField(null=True)
     
     def __str__(self):
         return self.text
