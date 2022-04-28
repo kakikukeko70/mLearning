@@ -1,3 +1,4 @@
+from dataclasses import field
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
@@ -32,8 +33,8 @@ class BookmarkForm(forms.ModelForm):
 class TodoForm(forms.ModelForm):
     class Meta:
         model = Todo
-        fields = ('text',)
-
+        fields = ('text', 'deadline',)
+        
 subject = "Your account is up and running!"
 message_template = """
 We’d like to confirm that your account was created successfully. 
