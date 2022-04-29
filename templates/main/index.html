@@ -11,8 +11,8 @@
 <fieldset>
     <form method="POST" action="{% url 'main:add_todo' %}">
         {% csrf_token %}
-        <input type="text" name="text" placeholder="task">
-        <input type="text" name="deadline" placeholder="deadline"> (e.g {{ today }})
+        <input type="text" name="text" autocomplete="off" placeholder="task">
+        <input type="date" name="deadline">
         <button>add a task</button>
     </form>
     <br>
@@ -30,10 +30,10 @@
                     <button>update</button> 
                 </div>
             </form>
+            <button><a href="{% url 'main:todo_edit' todo.pk %}">edit</a></button>
         {% endfor %}
     </fieldset>
 </fieldset>
 <p><a href="{% url 'main:folders' %}">bookmark folders</a></p>
-<p><a href="{% url 'main:todo' %}">edit todo</a></p>
 <p><a href="{% url 'accounts:accounts' %}">accounts</a></p>
 {% endblock %}

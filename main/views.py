@@ -14,7 +14,6 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['today'] = date.today().isoformat
         return context
 
     def upload_memo(request):
@@ -29,8 +28,10 @@ class IndexView(TemplateView):
         todo_form = TodoForm(request.POST) 
         if todo_form.is_valid():
             user = User.objects.get(pk=request.user.id)
-            todo = Todo.objects.create(text=todo_form.cleaned_data['text'], deadline=todo_form.cleaned_data['deadline'],
- user=user)
+            todo = Todo.objects.create(
+            text=todo_form.cleaned_data['text'], 
+            deadline=todo_form.cleaned_data['deadline'],
+            user=user)
             return HttpResponseRedirect(reverse('main:index'))
     
     def update_todo(request, **kwargs):
@@ -128,20 +129,25 @@ class FolderdetailView(DetailView):
         folder.delete()
         return HttpResponseRedirect(reverse('main:folders'))
 
-class TodoListView(TemplateView):
-    template_name = 'main/todo.html'
-
 class TodoEditView(DetailView):
     model = Todo
     template_name = 'main/todo_edit.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['todo_edit_form'] = TodoForm()
+        print(kwargs)
+        todo = Todo.objects.get(text=kwargs['object'])
+        context['deadline'] = todo.deadline.isoformat()
         return context
     
+    def update_todo(request, **kwargs):
+        todo = Todo.objects.get(pk=kwargs['pk'])
+        todo_form = TodoForm(request.POST, instance=todo)
+        if todo_form.is_valid():
+            todo_form.save()
+            return HttpResponseRedirect(reverse('main:index'))
+    
     def delete_todo(request, **kwargs):
-        print(kwargs)
         todo = Todo.objects.get(pk=kwargs['pk'])
         todo.delete()
-        return HttpResponseRedirect(reverse('main:todo'))
+        return HttpResponseRedirect(reverse('main:index'))
