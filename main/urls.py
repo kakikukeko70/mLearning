@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import path, include
-from .views import IndexView, TodoListView, TodoEditView, FolderView, EditBookmark, FolderdetailView
+from .views import IndexView, TodoEditView, FolderView, EditBookmark, FolderdetailView
 
 app_name='main'
 urlpatterns = [
@@ -18,7 +18,7 @@ urlpatterns = [
     path('add_bookmark/<int:id>', FolderdetailView.add_bookmark, name='add_bookmark'),
     path('change_foldername/<int:id>/', FolderdetailView.change_folder_name, name='change_folder_name'),
     path('delete_folder/<int:id>', FolderdetailView.delete_folder, name='delete_folder'),
-    path('todo/', TodoListView.as_view(), name='todo'),
     path('todo_edit/<int:pk>/', TodoEditView.as_view(), name='todo_edit'),
+    path('update_todo>/<int:pk>/', TodoEditView.update_todo, name='update_todo'),
     path('delete_todo/<int:pk>/', TodoEditView.delete_todo, name='delete_todo'),
 ]
