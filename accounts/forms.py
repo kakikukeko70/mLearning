@@ -34,6 +34,9 @@ class TodoForm(forms.ModelForm):
     class Meta:
         model = Todo
         fields = ('text', 'deadline',)
+        Widgets = {
+            'deadline': forms.DateInput(attrs={'type': 'date'}),
+        }
         
 subject = "Your account is up and running!"
 message_template = """
