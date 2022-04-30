@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for todo in todo_list %}
+    <form method="POST" action="{% url 'main:update_task' todo.pk %}">
+        {% csrf_token %}
+        <div>
+            {% if todo.done %}
+            <input type="checkbox" name="is_done_{{ todo.id }}" id="is_done_{{ todo.id }}" checked>
+            {% else %}
+            <input type="checkbox" name="is_done_{{ todo.id }}" id="is_done_{{ todo.id }}">
+            {% endif %}
+            <label for="is_done_{{ todo.id }}">{{ todo }}({{ todo.deadline }})</label>    
+            <button>update</button> 
+        </div>
+    </form>
+{% endfor %}
+{% endblock %}
