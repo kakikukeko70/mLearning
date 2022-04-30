@@ -1,7 +1,8 @@
 from datetime import date
+from pyexpat import model
 
 from django.views.generic.base import TemplateView
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.urls import reverse
 from django.http import HttpResponseRedirect 
 from django.shortcuts import get_object_or_404
@@ -14,6 +15,9 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        todo = Todo.objects.filter(user=self.request.user)
+        context['todos'] = todo.filter(deadline__gte=date.today()).order_by('deadline')
+        context['overdues'] = todo.filter(deadline__lt=date.today(), done=False).order_by('deadline')
         return context
 
     def upload_memo(request):
@@ -135,7 +139,6 @@ class TodoEditView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(kwargs)
         todo = Todo.objects.get(text=kwargs['object'])
         context['deadline'] = todo.deadline.isoformat()
         return context
@@ -151,3 +154,20 @@ class TodoEditView(DetailView):
         todo = Todo.objects.get(pk=kwargs['pk'])
         todo.delete()
         return HttpResponseRedirect(reverse('main:index'))
+
+class TodosView(ListView):
+    model = Todo
+    template_name = 'main/todos.html'
+    
+    def get_queryset(self):
+        return Todo.objects.order_by('deadline')
+
+    def update_todo(request, **kwargs):
+       is_done = request.POST.get(f"is_done_{kwargs['pk']}")
+       todo = Todo.objects.get(pk=kwargs['pk'])
+       if is_done:
+           todo.done = True
+       else:
+           todo.done = False
+       todo.save()
+       return HttpResponseRedirect(reverse('main:todos'))

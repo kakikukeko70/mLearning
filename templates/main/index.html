@@ -17,7 +17,19 @@
     </form>
     <br>
     <fieldset>
-        {% for todo in user.todo_set.all %}
+        {% for overdue in overdues %}
+            <form method="POST" action="{% url 'main:update_todo' overdue.id %}">
+                {% csrf_token %}
+                <div>
+                    <input type="checkbox" name="is_done_{{ overdue.id }}" id="is_done_{{ overdue.id }}">
+                    <label for="is_done_{{ overdue.id }}">{{ overdue }}({{ overdue.deadline }})</label>    
+                    <button>update</button> 
+                </div>
+            </form>
+            <button><a href="{% url 'main:todo_edit' overdue.pk %}">edit</a></button>
+        {% endfor %}
+        <hr>
+        {% for todo in todos %}
             <form method="POST" action="{% url 'main:update_todo' todo.id %}">
                 {% csrf_token %}
                 <div>
@@ -35,5 +47,6 @@
     </fieldset>
 </fieldset>
 <p><a href="{% url 'main:folders' %}">bookmark folders</a></p>
+<p><a href="{% url 'main:todos' %}">todos</a></p>
 <p><a href="{% url 'accounts:accounts' %}">accounts</a></p>
 {% endblock %}

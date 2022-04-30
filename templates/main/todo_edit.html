@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="POST" action="{% url 'main:update_todo' todo.pk %}">
+<form method="POST" action="{% url 'main:edit_todo' todo.pk %}">
     {% csrf_token %}
     <input type="text" value="{{ todo }}" name="text" id="id_text"> 
     <input type="date" value="{{ deadline }}" name="deadline" id="id_deadline">
