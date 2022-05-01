@@ -1,5 +1,4 @@
 from datetime import date
-from pyexpat import model
 
 from django.views.generic.base import TemplateView
 from django.views.generic import DetailView, ListView
@@ -16,6 +15,9 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         todo = Todo.objects.filter(user=self.request.user)
+        memo_form = MemoForm()
+        memo_form.fields['memo'].initial = self.request.user.memo
+        context['memo_form'] = memo_form
         context['todos'] = todo.filter(deadline__gte=date.today()).order_by('deadline')
         context['overdues'] = todo.filter(deadline__lt=date.today(), done=False).order_by('deadline')
         return context
@@ -23,10 +25,12 @@ class IndexView(TemplateView):
     def upload_memo(request):
         form = MemoForm(request.POST)
         if form.is_valid():
-            content = form.cleaned_data['content']
+            content = form.cleaned_data['memo']
             user = get_object_or_404(User, pk=request.user.id)
             user.memo = content
+            user.save()
             return HttpResponseRedirect(reverse('main:index'))
+        return HttpResponseRedirect(reverse('main:error'))
 
     def add_todo(request):
         todo_form = TodoForm(request.POST) 
@@ -37,7 +41,8 @@ class IndexView(TemplateView):
             deadline=todo_form.cleaned_data['deadline'],
             user=user)
             return HttpResponseRedirect(reverse('main:index'))
-    
+        return HttpResponseRedirect(reverse('main:error'))
+      
     def update_todo(request, **kwargs):
        is_done = request.POST.get(f"is_done_{kwargs['pk']}")
        todo = Todo.objects.get(pk=kwargs['pk'])
@@ -64,6 +69,7 @@ class FolderView(TemplateView):
             folder.user = user
             folder.save()
             return HttpResponseRedirect(reverse('main:folders'))
+        return HttpResponseRedirect(reverse('main:error'))
 
 class EditBookmark(DetailView):
     model = Bookmark
@@ -81,7 +87,8 @@ class EditBookmark(DetailView):
             bookmark = Bookmark.objects.get(id=kwargs['id'])
             bookmark.name = bookmark_name
             bookmark.save()
-        return HttpResponseRedirect(reverse('main:editbookmark', kwargs={'pk' : kwargs['id']})) 
+            return HttpResponseRedirect(reverse('main:editbookmark', kwargs={'pk' : kwargs['id']})) 
+        return HttpResponseRedirect(reverse('main:error'))
             
     def change_folder(request, **kwargs):
         folder_name = request.POST['folder']
@@ -111,6 +118,7 @@ class FolderdetailView(DetailView):
             bookmark.folder = folder
             bookmark.save()
             return HttpResponseRedirect(reverse('main:folderdetail', kwargs={'pk' : kwargs['id']})) 
+        return HttpResponseRedirect(reverse('main:error'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -127,6 +135,7 @@ class FolderdetailView(DetailView):
             folder.name = folder_name
             folder.save()
             return HttpResponseRedirect(reverse('main:folderdetail', kwargs={'pk' : kwargs['id']})) 
+        return HttpResponseRedirect(reverse('main:error'))
 
     def delete_folder(request, **kwargs):
         folder = Folder.objects.get(id=kwargs['id'])
@@ -149,6 +158,8 @@ class TodoEditView(DetailView):
         if todo_form.is_valid():
             todo_form.save()
             return HttpResponseRedirect(reverse('main:index'))
+        return HttpResponseRedirect(reverse('main:error'))
+
     
     def delete_todo(request, **kwargs):
         todo = Todo.objects.get(pk=kwargs['pk'])
@@ -171,3 +182,6 @@ class TodosView(ListView):
            todo.done = False
        todo.save()
        return HttpResponseRedirect(reverse('main:todos'))
+       
+class ErrorView(TemplateView):
+    template_name = 'error/error.html'
