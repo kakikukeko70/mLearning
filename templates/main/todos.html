@@ -2,7 +2,7 @@
 
 {% block content %}
 {% for todo in todo_list %}
-    <form method="POST" action="{% url 'main:update_task' todo.pk %}">
+    <form method="POST" action="{% url 'main:update_task' todo.id %}">
         {% csrf_token %}
         <div>
             {% if todo.done %}

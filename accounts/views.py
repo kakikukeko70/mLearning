@@ -9,9 +9,15 @@ from django.urls import reverse
 from .models import User
 from .forms import SignUpForm, activate_user, UserNameForm
 
-# Create your views here.
 class AccountView(TemplateView):
     template_name = 'accounts/accounts.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        username_form = UserNameForm()
+        username_form.fields['username'].initial = self.request.user.username
+        context['username_form'] = UserNameForm()
+        return context
 
 class SignUpView(CreateView):
     form_class = SignUpForm
@@ -36,3 +42,4 @@ def change_username(request):
         user.username = username
         user.save()   
         return HttpResponseRedirect(reverse('main:index'))
+    return HttpResponseRedirect(reverse('main:error'))
