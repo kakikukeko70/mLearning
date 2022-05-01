@@ -1,4 +1,5 @@
-from dataclasses import field
+from dataclasses import field, fields
+from pyexpat import model
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
@@ -7,33 +8,45 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes 
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django import forms
-from .models import Bookmark, Folder, Todo
+from .models import User, Bookmark, Folder, Todo
 
 User = get_user_model()
 
-class MemoForm(forms.Form):
-    content = forms.CharField(label='', widget=forms.Textarea())
+class MemoForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('memo',)
+        labels = {
+            'memo': '',
+        }
 
-class UserNameForm(forms.Form):
-    username = forms.CharField()
+class UserNameForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username',)
 
-class BookmarkNameForm(forms.Form):
-    name = forms.CharField()
-    
 class FolderForm(forms.ModelForm):
     class Meta:
         model = Folder
         fields = ('name', )
+        widgets = {
+            'name': forms.TextInput(attrs={'autocomplete': 'off'})
+        }
     
 class BookmarkForm(forms.ModelForm):
     class Meta:
         model = Bookmark
-        fields = ('name', 'url',)
+        fields = ('name', 'url')
+
+class BookmarkNameForm(forms.ModelForm):
+   class Meta:
+       model = Bookmark
+       fields = ('name',) 
 
 class TodoForm(forms.ModelForm):
     class Meta:
         model = Todo
-        fields = ('text', 'deadline',)
+        fields = ('text', 'deadline')
         Widgets = {
             'deadline': forms.DateInput(attrs={'type': 'date'}),
         }
