@@ -3,8 +3,8 @@
 {% block content %}
 <form method="POST" action="{% url 'main:edit_todo' todo.pk %}">
     {% csrf_token %}
-    <input type="text" value="{{ todo }}" name="text" id="id_text"> 
-    <input type="date" value="{{ deadline }}" name="deadline" id="id_deadline">
+    <input type="text" value="{{ todo }}" name="text" id="id_text" maxlength="20" required> 
+    <input type="date" value="{{ deadline }}" name="deadline" id="id_deadline" required>
     <button>save</button>
 </form>
 <button><a href="{% url 'main:delete_todo' todo.pk %}">delete</a></button>
