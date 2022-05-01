@@ -1,7 +1,0 @@
-{% extends 'base.html' %}
-
-{% block content %}
-{% for todo in user.todo_set.all %}
-    <p><a href="{% url 'main:todo_edit' todo.pk %}">{{ todo }}</a></p>
-{% endfor %}
-{% endblock %}
