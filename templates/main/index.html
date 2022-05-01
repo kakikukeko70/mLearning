@@ -4,15 +4,15 @@
 <h3>{{ user }}</h3>
 <form method="POST" action="{% url 'main:upload_memo' %}">
     {% csrf_token %}
-    <textarea name='content' rows='10px' cols='40px' required id="id_content">{{ user.memo }}</textarea>
+    {{ memo_form }}
     <button>update</button>
 </form>
 <br>
 <fieldset>
     <form method="POST" action="{% url 'main:add_todo' %}">
         {% csrf_token %}
-        <input type="text" name="text" autocomplete="off" placeholder="task">
-        <input type="date" name="deadline">
+        <input type="text" name="text" autocomplete="off" placeholder="task" maxlength="20" required>
+        <input type="date" name="deadline" required>
         <button>add a task</button>
     </form>
     <br>
