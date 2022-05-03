@@ -37,9 +37,9 @@ class IndexView(TemplateView):
         if todo_form.is_valid():
             user = User.objects.get(pk=request.user.id)
             todo = Todo.objects.create(
-            text=todo_form.cleaned_data['text'], 
-            deadline=todo_form.cleaned_data['deadline'],
-            user=user)
+                text=todo_form.cleaned_data['text'], 
+                deadline=todo_form.cleaned_data['deadline'],
+                user=user)
             return HttpResponseRedirect(reverse('main:index'))
         return HttpResponseRedirect(reverse('main:error'))
       

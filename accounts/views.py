@@ -19,6 +19,16 @@ class AccountView(TemplateView):
         context['username_form'] = UserNameForm()
         return context
 
+    def change_username(request):
+        form = UserNameForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            user = get_object_or_404(User, pk=request.user.id)
+            user.username = username
+            user.save()   
+            return HttpResponseRedirect(reverse('main:index'))
+        return HttpResponseRedirect(reverse('main:error'))
+
 class SignUpView(CreateView):
     form_class = SignUpForm
     success_url = reverse_lazy('accounts:verify')
@@ -33,13 +43,3 @@ class ActivateView(TemplateView):
     def get(self, request, uidb64, token, *args, **kwargs):
         result = activate_user(uidb64, token)
         return super().get(request, result=result, **kwargs)
-
-def change_username(request):
-    form = UserNameForm(request.POST)
-    if form.is_valid():
-        username = form.cleaned_data['username']
-        user = get_object_or_404(User, pk=request.user.id)
-        user.username = username
-        user.save()   
-        return HttpResponseRedirect(reverse('main:index'))
-    return HttpResponseRedirect(reverse('main:error'))
