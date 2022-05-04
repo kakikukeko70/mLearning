@@ -1,8 +1,7 @@
-settings.py
 venv/
-requirements.txt
 runtime.txt
 accounts/__pycache__
 config/__pycache__
 main/__pycache__
 accounts/migrations/__pycache__
+.env
