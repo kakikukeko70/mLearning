@@ -12,24 +12,19 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from pathlib import Path
 
-import environ 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-env = environ.Env()
-env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = 'django-insecure-!8d-27)0t%z6*bzi78j&og6n(=zjacepu*^48c-mewnqh(ddwq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = True 
 
-ALLOWED_HOSTS = ['127.0.0.1', '35.78.13.25']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -60,7 +55,7 @@ ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.db.backends.postgresql_psycopg2',
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -81,7 +76,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-        'default': env.db(),
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'djangodb',
+            'USER': 'ky',
+            'PASSWORD': 'ocnlib876',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
 }
 
 # Password validation
@@ -106,9 +108,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'Asiz/Tokyo'
+LANGUAGE_CODE = 'en'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 
