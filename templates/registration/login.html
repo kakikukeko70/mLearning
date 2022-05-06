@@ -1,10 +1,9 @@
-{% extends 'base.html' %}
-
-{% block content %}
+<header>
+    <h1>mLearning</h1>
+</header>
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button>ログイン</button>
 </form>
 <p><a href="{% url 'accounts:signup' %}">signup</a></p>
-{% endblock %}
