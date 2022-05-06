@@ -7,5 +7,5 @@
     <input type="date" value="{{ deadline }}" name="deadline" id="id_deadline" required>
     <button>save</button>
 </form>
-<button><a href="{% url 'main:delete_todo' todo.pk %}">delete</a></button>
+<button class="delete_todo"><a href="{% url 'main:delete_todo' todo.pk %}">delete</a></button>
 {% endblock %}
