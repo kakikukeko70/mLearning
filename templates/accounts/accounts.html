@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-  <form method="POST" action="{% url 'accounts:change_username' %}">
+  <form method="POST" action="{% url 'accounts:change_username' %}" class="change_name">
     {% csrf_token %}
     {{ username_form.as_p }}
-    <button>change username</button>
+    <button class="change_button">change username</button>
   </form>
-  <p><a href="{% url 'logout' %}">Logout</a></p>
+  <p class="nof"><a href="{% url 'logout' %}">Logout</a></p>
   <p><a href="{% url 'password_change' %}">Change your password</a></p>
   <p><a href="{% url 'password_reset' %}">Forgot password</a></p>
+  <img src="{% static 'white.png' %}">
 {% endblock %}
