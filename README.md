@@ -1,16 +1,18 @@
 学習管理アプリ
 
 http://35.78.13.25
+<br><br>
 
-プログラミング言語
+プログラミング言語<br>
 --Python
-フレームワーク
+
+フレームワーク<br>
 --Django
 
-データベース
+データベース<br>
 --PostgreSQL
 
-サーバー
---AWS(VPC, EC2, RDS)
---gunicorn
---nginx
+サーバー<br>
+--AWS(VPC, EC2, RDS)<br>
+--gunicorn<br>
+--nginx<br>
