@@ -1,52 +1,50 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <h3>{{ user }}</h3>
-<form method="POST" action="{% url 'main:upload_memo' %}">
-    {% csrf_token %}
-    {{ memo_form }}
-    <button>update</button>
-</form>
-<br>
-<fieldset>
-    <form method="POST" action="{% url 'main:add_todo' %}">
+<div class="memo">
+    <form method="POST" action="{% url 'main:upload_memo' %}"></form>
         {% csrf_token %}
-        <input type="text" name="text" autocomplete="off" placeholder="task" maxlength="20" required>
-        <input type="date" name="deadline" required>
-        <button>add a task</button>
+        {{ memo_form }}
+        <button>update</button>
     </form>
-    <br>
+</div>
+<br>
+<div class="todos">
     <fieldset>
-        {% for overdue in overdues %}
-            <form method="POST" action="{% url 'main:update_todo' overdue.id %}">
-                {% csrf_token %}
-                <div>
-                    <input type="checkbox" name="is_done_{{ overdue.id }}" id="is_done_{{ overdue.id }}">
-                    <label for="is_done_{{ overdue.id }}">{{ overdue }}({{ overdue.deadline }})</label>    
-                    <button>update</button> 
-                </div>
-            </form>
-            <button><a href="{% url 'main:todo_edit' overdue.pk %}">edit</a></button>
-        {% endfor %}
-        <hr>
-        {% for todo in todos %}
-            <form method="POST" action="{% url 'main:update_todo' todo.id %}">
-                {% csrf_token %}
-                <div>
-                    {% if todo.done %}
-                    <input type="checkbox" name="is_done_{{ todo.id }}" id="is_done_{{ todo.id }}" checked>
-                    {% else %}
-                    <input type="checkbox" name="is_done_{{ todo.id }}" id="is_done_{{ todo.id }}">
-                    {% endif %}
-                    <label for="is_done_{{ todo.id }}">{{ todo }}({{ todo.deadline }})</label>    
-                    <button>update</button> 
-                </div>
-            </form>
-            <button><a href="{% url 'main:todo_edit' todo.pk %}">edit</a></button>
-        {% endfor %}
+        <form method="POST" action="{% url 'main:add_todo' %}">
+            {% csrf_token %}
+            <input type="text" name="text" autocomplete="off" placeholder="task" maxlength="20" required>
+            <input type="date" name="deadline" required>
+            <button>add a task</button>
+        </form>
+        <br>
+        <fieldset>
+            {% for overdue in overdues %}
+                <form method="POST" action="{% url 'main:update_todo' overdue.id %}">
+                    {% csrf_token %}
+                        <input type="checkbox" name="is_done_{{ overdue.id }}" id="is_done_{{ overdue.id }}">
+                        <label for="is_done_{{ overdue.id }}">{{ overdue }}({{ overdue.deadline }})</label>    
+                        <button>update</button> 
+                </form>
+            {% endfor %}
+            <hr>
+            {% for todo in todos %}
+                <form method="POST" action="{% url 'main:update_todo' todo.id %}">
+                    {% csrf_token %}
+                    <div>
+                        {% if todo.done %}
+                        <input type="checkbox" name="is_done_{{ todo.id }}" id="is_done_{{ todo.id }}" checked>
+                        {% else %}
+                        <input type="checkbox" name="is_done_{{ todo.id }}" id="is_done_{{ todo.id }}">
+                        {% endif %}
+                        <label for="is_done_{{ todo.id }}">{{ todo }}({{ todo.deadline }})</label>    
+                        <button>update</button> 
+                    </div>
+                </form>
+            {% endfor %}
+        </fieldset>
     </fieldset>
-</fieldset>
-<p><a href="{% url 'main:folders' %}">bookmark folders</a></p>
-<p><a href="{% url 'main:todos' %}">todos</a></p>
-<p><a href="{% url 'accounts:accounts' %}">accounts</a></p>
+</div>
 {% endblock %}

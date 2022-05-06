@@ -1,0 +1,38 @@
+header {
+    border-bottom: solid 1px gray;
+    margin-bottom: 10px;
+}
+
+.head-element {
+    display: inline-block;
+    margin: 10px 25px 10px 25px;
+}
+
+.todos {
+ width: 800px;
+}
+
+.todo {
+    display: flex;
+}
+
+.edit {
+    margin-left: 3px;
+}
+
+.delete_todo {
+    margin-top: 5px;
+}
+
+.bookmark {
+    margin: 4px;
+}
+
+.change_name {
+    display: flex;
+}
+
+.change_button {
+    height: 25px;
+    margin: auto 0 auto 5px;
+}
