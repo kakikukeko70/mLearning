@@ -18,7 +18,9 @@
     <button>add bookmark</button>
 </form>
 {% for bookmark in folder.bookmark_set.all %}
-    <p><a href="{{ bookmark.url }}">{{ bookmark }}</a></p>
-    <p><a href="{% url 'main:editbookmark' bookmark.id %}">edit</a></p>
+    <div class="bookmark">
+        <a href="{{ bookmark.url }}">{{ bookmark }}</a>
+        <button><a href="{% url 'main:editbookmark' bookmark.id %}">edit</a></button>
+    </div>
 {% endfor %}
 {% endblock %}
