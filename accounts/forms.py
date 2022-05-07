@@ -1,5 +1,3 @@
-from dataclasses import field, fields
-from pyexpat import model
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
@@ -57,13 +55,10 @@ We’d like to confirm that your account was created successfully.
 To access, go to the link below.
 """
 
-
 def get_activate_url(user):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
     return settings.FRONTEND_URL + "/activate/{}/{}/".format(uid, token)
-
-
 
 class SignUpForm(UserCreationForm):
     class Meta:
@@ -71,11 +66,9 @@ class SignUpForm(UserCreationForm):
         fields = ("username", "email", "password1", "password2")
 
     def save(self, commit=True):
-        # commit=Falseだと、DBに保存されない
         user = super().save(commit=False)
         user.email = self.cleaned_data["email"]
         
-        # 確認するまでログイン不可にする
         user.is_active = False
         
         if commit:
