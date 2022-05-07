@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'django-ses',
 
     'main',
     'accounts',
@@ -123,7 +125,7 @@ STATIC_ROOT = '/var/www/mLearning/static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django_ses.SESBackend'
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
@@ -131,4 +133,7 @@ LOGOUT_REDIRECT_URL = "/login/"
 
 AUTH_USER_MODEL = 'accounts.User'
 
-FRONTEND_URL = "http://127.0.0.1:8000"
+FRONTEND_URL = "http://mlearn.site"
+
+AWS_ACCESS_KEY = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
