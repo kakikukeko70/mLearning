@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect 
 from django.urls import reverse
+
 from .models import User
 from .forms import SignUpForm, activate_user, UserNameForm
 
@@ -16,7 +17,7 @@ class AccountView(TemplateView):
         context = super().get_context_data(**kwargs)
         username_form = UserNameForm()
         username_form.fields['username'].initial = self.request.user.username
-        context['username_form'] = UserNameForm()
+        context['username_form'] = username_form
         return context
 
     def change_username(request):
