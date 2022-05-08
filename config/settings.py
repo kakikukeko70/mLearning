@@ -127,6 +127,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django_ses.SESBackend'
 
+EMAIL_HOST = 'email-smtp.ap-northeast-1.amazonaws.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'AKIAWLRHIV65UZLC4SOS'
+EMAIL_HOST_PASSWORD = 'BCUROhFH+C/ggqqr9XIdN0vLVNZfwbQWpOpLFqtWTiF2'
+EMAIL_USE_TLS = True
+
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/login/"
