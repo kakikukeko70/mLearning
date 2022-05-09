@@ -1,6 +1,5 @@
-signupはまだできません.
-
-学習管理アプリ
+学習管理アプリ<br>
+URL: http://mlearn.site/
 <br><br>
 
 <h3>使用技術</h3>
@@ -14,7 +13,7 @@ signupはまだできません.
 データベース<br>
 --PostgreSQL
 
-サーバー<br>
---AWS(VPC, EC2, RDS)<br>
+インフラ<br>
+--AWS(VPC, EC2, RDS, Route53, SES)<br>
 --gunicorn<br>
 --nginx<br>

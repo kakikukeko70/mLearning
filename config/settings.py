@@ -38,8 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    'django_ses',
-
     'main',
     'accounts',
 ]
@@ -124,14 +122,15 @@ STATIC_ROOT = '/var/www/mLearning/static'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-EMAIL_BACKEND = 'django_ses.SESBackend'
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'email-smtp.ap-northeast-1.amazonaws.com'
 EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'no-reply@mlearn.site'
+AWS_SES_REGION_NAME = 'ap-northeast-1'
+AWS_SES_REGION_ENDPOINT = 'email.ap-northeast-1.amazonaws.com'
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
@@ -140,6 +139,3 @@ LOGOUT_REDIRECT_URL = "/login/"
 AUTH_USER_MODEL = 'accounts.User'
 
 FRONTEND_URL = "http://mlearn.site"
-
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
