@@ -52,7 +52,7 @@ class TodoForm(forms.ModelForm):
 subject = "Your account is up and running!"
 message_template = """
 We’d like to confirm that your account was created successfully. 
-To access, go to the link below.
+To access account, go to the link below.
 """
 
 def get_activate_url(user):
