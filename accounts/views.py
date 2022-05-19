@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, DeleteView
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -11,7 +11,7 @@ from .models import User
 from .forms import SignUpForm, activate_user, UserNameForm
 
 class AccountView(TemplateView):
-    template_name = 'accounts/accounts.html'
+    template_name = 'accounts/account.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -29,6 +29,14 @@ class AccountView(TemplateView):
             user.save()   
             return HttpResponseRedirect(reverse('main:index'))
         return HttpResponseRedirect(reverse('main:error'))
+    
+    def delete_confirm(request):
+        request.user.delete()
+        return HttpResponseRedirect(reverse('login'))
+    
+class UserDeleteView(DeleteView):
+    model = User
+    success_url = reverse_lazy('login')
 
 class SignUpView(CreateView):
     form_class = SignUpForm
