@@ -14,7 +14,7 @@ URL: http://mlearn.site/
 --PostgreSQL
 
 インフラ<br>
---linux<br>
+--Linux(Ubuntu)<br>
 --AWS(VPC, EC2, RDS, Route53, SES)<br>
 --gunicorn<br>
---nginx<br>
+--Nginx<br>
