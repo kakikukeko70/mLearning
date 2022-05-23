@@ -22,6 +22,6 @@ urlpatterns = [
     path('edit_todo/<int:pk>/', TodoEditView.update_todo, name='edit_todo'),
     path('delete_todo/<int:pk>/', TodoEditView.delete_todo, name='delete_todo'),
     path('todos/', TodosView.as_view(), name='todos'), 
-    path('update_task/<int:pk>/', TodosView.update_todo, name='update_task'),
+    path('change_done/<int:pk>/', TodosView.change_done, name='change_done'),
     path('error/', ErrorView.as_view(), name='error'),
 ]
