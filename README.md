@@ -20,6 +20,18 @@ URL: http://mlearn.site/
 --Nginx<br>
 
 <h3>工夫した点</h3>
+<hr>
 GitHub Flowで開発した．<br>
 コードの可読性を意識した．（勉強中）<br>
 AWSにデプロイしてローカル環境で動いたものが本番環境でも動くか確かめた．<br>
+
+<br>
+<h3>開発環境</h3>
+<hr>
+<ul>
+  <li>WSL(Windows11)</li>
+  <li>Vscode</li>
+  <li>Git/GitHub</li>
+  <li>pyenv</li>
+  <li>venv</li>
+</ul>
