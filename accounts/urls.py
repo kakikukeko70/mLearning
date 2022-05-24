@@ -1,11 +1,11 @@
 from django.urls import path, include
-from .views import AccountView, UserDeleteView, SignUpView, ActivateView, VerifyView
+from .views import AccountView, CangeUserNameView, UserDeleteView, SignUpView, ActivateView, VerifyView
 
 app_name = 'accounts'
 urlpatterns = [
-    path('account/', AccountView.as_view(), name='accounts'),
-    path('change_username', AccountView.change_username, name='change_username'),
-    path('delete_confirm/', AccountView.delete_confirm, name='delete_confirm'),
+    path('account/', AccountView.as_view(), name='account'),
+    path('change_username/<int:pk>/', CangeUserNameView.as_view(), name='change_username'),
+    path('testuser_login', AccountView.testuser_login, name='testuser_login'),
     path('delete_account/<int:pk>/', UserDeleteView.as_view(), name='delete_account'),
     path('signup/', SignUpView.as_view(), name='signup'),
     path('email_sent/', VerifyView.as_view(), name='verify'),
