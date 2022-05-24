@@ -142,9 +142,9 @@ class FolderdetailView(DetailView):
         folder.delete()
         return HttpResponseRedirect(reverse('main:folders'))
 
-class TodoEditView(DetailView):
+class EditTodoView(DetailView):
     model = Todo
-    template_name = 'main/todo_edit.html'
+    template_name = 'main/edit_todo.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
