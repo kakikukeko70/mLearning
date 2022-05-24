@@ -18,3 +18,8 @@ URL: http://mlearn.site/
 --AWS(VPC, EC2, RDS, Route53, SES)<br>
 --gunicorn<br>
 --Nginx<br>
+
+<h3>工夫した点</h3>
+GitHub Flowで開発した．<br>
+コードの可読性を意識した．（勉強中）<br>
+AWSにデプロイしてローカル環境で動いたものが本番環境でも動くか確かめた．<br>
