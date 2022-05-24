@@ -7,6 +7,6 @@
     <button>crate folder</button>
 </form>
 {% for folder in user.folder_set.all %}
-    <p><a href="{% url 'main:folderdetail' folder.id %}">{{ folder }}</a></p>
+    <p><a href="{% url 'main:folder_detail' folder.id %}">{{ folder }}</a></p>
 {% endfor %}
 {% endblock %}

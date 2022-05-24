@@ -2,7 +2,7 @@
 
 {% block content %}
 <fieldset>
-    <legend>edit folder</legend>
+    <legend>edit</legend>
     <form method="post" action="{% url 'main:change_folder_name' folder.id %}">
         {% csrf_token %}
        <input type="text" name='name' value="{{ folder }}" id="id_name" maxlength="30"> 

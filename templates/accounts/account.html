@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <p><a href="{% url 'accounts:change_username' user.id %}">Change username</a></p>
+  <p><a href="{% url 'password_change' %}">Change your password</a></p>
+  <p><a href="{% url 'password_reset' %}">Forgot password</a></p>
+  <p class="nof"><a href="{% url 'logout' %}">Logout</a></p>
+  <a href="{% url 'accounts:delete_account' user.id %}">deactivate your account</a>
+  <br>
+  <img src="{% static 'white.png' %}">
+{% endblock %}

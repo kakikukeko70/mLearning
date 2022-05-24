@@ -3,7 +3,7 @@
 {% block content %}
 {% for todo in todo_list %}
     <div class="todo">
-        <form method="POST" action="{% url 'main:update_task' todo.id %}">
+        <form method="POST" action="{% url 'main:change_done' todo.id %}">
             {% csrf_token %}
             <div>
                 {% if todo.done %}
@@ -15,7 +15,7 @@
                 <button>update</button> 
             </div>
         </form>
-        <button class="edit"><a href="{% url 'main:todo_edit' todo.pk %}">edit</a></button>
+        <button class="edit"><a href="{% url 'main:edit_todo' todo.pk %}">edit</a></button>
     </div>
 {% endfor %}
 {% endblock %}
