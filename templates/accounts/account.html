@@ -2,14 +2,10 @@
 {% load static %}
 
 {% block content %}
-  <form method="POST" action="{% url 'accounts:change_username' %}" class="change_name">
-    {% csrf_token %}
-    {{ username_form.as_p }}
-    <button class="change_button">change username</button>
-  </form>
-  <p class="nof"><a href="{% url 'logout' %}">Logout</a></p>
+  <p><a href="{% url 'accounts:change_username' user.id %}">Change username</a></p>
   <p><a href="{% url 'password_change' %}">Change your password</a></p>
   <p><a href="{% url 'password_reset' %}">Forgot password</a></p>
+  <p class="nof"><a href="{% url 'logout' %}">Logout</a></p>
   <a href="{% url 'accounts:delete_account' user.id %}">deactivate your account</a>
   <br>
   <img src="{% static 'white.png' %}">
