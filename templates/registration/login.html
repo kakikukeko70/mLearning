@@ -7,3 +7,10 @@
     <button>login</button>
 </form>
 <p><a href="{% url 'accounts:signup' %}">signup</a></p>
+
+<fieldset>
+    <p>テストアカウント</p>
+    <p>username: test</p>
+    <p>password: testuser</p>
+    <button><a href="{% url 'accounts:testuser_login' %}">login</a></button>
+</fieldset>
