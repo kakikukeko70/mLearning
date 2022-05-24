@@ -30,7 +30,7 @@ AWSにデプロイしてローカル環境で動いたものが本番環境で�
 <hr>
 <ul>
   <li>WSL(Windows11)</li>
-  <li>Vscode</li>
+  <li>Visual Studio Code</li>
   <li>Git/GitHub</li>
   <li>pyenv</li>
   <li>venv</li>
