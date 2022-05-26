@@ -42,7 +42,7 @@ class AccountView(TemplateView):
 class CangeUserNameView(UpdateView):
     model = User
     form_class = UserNameForm
-    success_url = reverse_lazy('account')
+    success_url = reverse_lazy('accounts:account')
 
     def get_initial(self):
         return {"username": self.request.user}
