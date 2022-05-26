@@ -4,7 +4,7 @@
 {% block content %}
 <h3>{{ user }}</h3>
 <div class="memo">
-    <form method="POST" action="{% url 'main:upload_memo' %}">
+    <form method="POST" action="{% url 'main:update_memo' %}">
         {% csrf_token %}
         {{ memo_form }}
         <button>update</button>
@@ -31,7 +31,7 @@
             {% endfor %}
             <hr>
             {% for todo in todos %}
-                <form method="POST" action="{% url 'main:update_todo' todo.id %}">
+                <form method="POST" action="{% url 'main:swtich_done' todo.id %}">
                     {% csrf_token %}
                     <div>
                         {% if todo.done %}
