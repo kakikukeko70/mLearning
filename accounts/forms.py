@@ -1,18 +1,17 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-from django.urls import reverse_lazy
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes 
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django import forms
-from .models import User, Bookmark, Folder, Todo
+from .models import User, Memo, Bookmark, Folder, Todo
 
 User = get_user_model()
 
 class MemoForm(forms.ModelForm):
     class Meta:
-        model = User
+        model = Memo
         fields = ('memo',)
         labels = {
             'memo': '',
@@ -89,6 +88,8 @@ def activate_user(uidb64, token):
     if default_token_generator.check_token(user, token):
         user.is_active = True
         user.save()
+        memo = Memo.objects.create(user=user)
+        memo.save()
         return True
     
     return False
