@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect 
 from django.shortcuts import get_object_or_404
 
-from accounts.models import User, Bookmark, Folder, Todo
+from accounts.models import User, Memo, Bookmark, Folder, Todo
 from accounts.forms import MemoForm, BookmarkForm, FolderForm, BookmarkNameForm, TodoForm 
 
 class IndexView(TemplateView):
@@ -16,13 +16,14 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         todo = Todo.objects.filter(user=self.request.user)
         memo_form = MemoForm()
-        memo_form.fields['memo'].initial = self.request.user.memo
+        memo = Memo.objects.get(user=self.request.user)
+        memo_form.fields['memo'].initial = memo.memo
         context['memo_form'] = memo_form
         context['todos'] = todo.filter(deadline__gte=date.today()).order_by('deadline')
         context['overdues'] = todo.filter(deadline__lt=date.today(), done=False).order_by('deadline')
         return context
 
-    def upload_memo(request):
+    def update_memo(request):
         form = MemoForm(request.POST)
         if form.is_valid():
             content = form.cleaned_data['memo']
@@ -43,7 +44,7 @@ class IndexView(TemplateView):
             return HttpResponseRedirect(reverse('main:index'))
         return HttpResponseRedirect(reverse('main:error'))
       
-    def update_todo(request, **kwargs):
+    def swith_done(request, **kwargs):
        is_done = request.POST.get(f"is_done_{kwargs['pk']}")
        todo = Todo.objects.get(pk=kwargs['pk'])
        if is_done:
@@ -155,8 +156,6 @@ class EditTodoView(DetailView):
     def update_todo(request, **kwargs):
         todo = Todo.objects.get(pk=kwargs['pk'])
         todo_form = TodoForm(request.POST, instance=todo)
-        print(request.POST, kwargs)
-        print(todo_form)
         if todo_form.is_valid():
             todo_form.save()
             return HttpResponseRedirect(reverse('main:todos'))
