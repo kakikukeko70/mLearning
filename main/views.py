@@ -1,24 +1,25 @@
 from datetime import date
 
 from django.views.generic.base import TemplateView
-from django.views.generic import DetailView, ListView
-from django.urls import reverse
+from django.views.generic import DetailView, ListView, DeleteView, UpdateView
+from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect 
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 
 from accounts.models import User, Memo, Bookmark, Folder, Todo
-from accounts.forms import MemoForm, BookmarkForm, FolderForm, BookmarkNameForm, TodoForm 
+from accounts.forms import MemoForm, BookmarkForm, FolderForm, BookmarkNameForm, TodoForm
 
 class IndexView(TemplateView):
     template_name = 'main/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        todo = Todo.objects.filter(user=self.request.user)
-        memo_form = MemoForm()
         memo = Memo.objects.get(user=self.request.user)
+        memo_form = MemoForm()
         memo_form.fields['memo'].initial = memo.memo
         context['memo_form'] = memo_form
+        context['todo_form'] = TodoForm()
+        todo = Todo.objects.filter(user=self.request.user)
         context['todos'] = todo.filter(deadline__gte=date.today()).order_by('deadline')
         context['overdues'] = todo.filter(deadline__lt=date.today(), done=False).order_by('deadline')
         return context
@@ -44,7 +45,7 @@ class IndexView(TemplateView):
             return HttpResponseRedirect(reverse('main:index'))
         return HttpResponseRedirect(reverse('main:error'))
       
-    def swith_done(request, **kwargs):
+    def switch_done(request, **kwargs):
        is_done = request.POST.get(f"is_done_{kwargs['pk']}")
        todo = Todo.objects.get(pk=kwargs['pk'])
        if is_done:
@@ -81,29 +82,30 @@ class EditBookmark(DetailView):
         context['bookmark_name_form'] = BookmarkNameForm()
         return context
 
-    def change_bookmark_name(request, **kwargs):
-        bookmark_name_form = BookmarkNameForm(request.POST)
-        if bookmark_name_form.is_valid():
-            bookmark_name = bookmark_name_form.cleaned_data['name']
-            bookmark = Bookmark.objects.get(id=kwargs['id'])
-            bookmark.name = bookmark_name
-            bookmark.save()
-            return HttpResponseRedirect(reverse('main:editbookmark', kwargs={'pk' : kwargs['id']})) 
-        return HttpResponseRedirect(reverse('main:error'))
-            
-    def change_folder(request, **kwargs):
-        folder_name = request.POST['folder']
-        folder = Folder.objects.get(name=folder_name)
-        bookmark = Bookmark.objects.get(id=kwargs['id'])
-        bookmark.folder = folder
-        bookmark.save()
-        return HttpResponseRedirect(reverse('main:editbookmark', kwargs={'pk' : kwargs['id']})) 
+class ChangeBookmarkName(UpdateView):
+    model = Bookmark
+    fields = ['name']
+
+    def get_success_url(self):
+        return reverse('main:edit_bookmark', kwargs={'pk': self.object.pk})
     
-    def delete_bookmark(request, **kwargs):
-        bookmark = Bookmark.objects.get(id=kwargs['id'])
-        folder_pk = bookmark.folder.id
-        bookmark.delete()
-        return HttpResponseRedirect(reverse('main:folderdetail', kwargs={'pk' : folder_pk})) 
+    def form_invalid(self,form):
+        return redirect('main:error')
+
+class ChangeFolderView(UpdateView):
+    model = Folder
+    fields = ['folder']
+
+    def get_success_url(self):
+        return reverse('main:edit_bookmark', kwargs={'pk': self.object.pk})
+
+class DeleteBookmarkView(DeleteView):
+    model = Bookmark
+
+    def get_success_url(self):
+        bookmark = Bookmark.objects.get(id=self.object.pk)
+        folder_pk = bookmark.folder.pk
+        return reverse('main:folder_detail', kwargs={'pk': folder_pk})
 
 class FolderdetailView(DetailView):
     model = Folder
@@ -125,7 +127,7 @@ class FolderdetailView(DetailView):
             bookmark.user = user
             bookmark.folder = folder
             bookmark.save()
-            return HttpResponseRedirect(reverse('main:folderdetail', kwargs={'pk' : kwargs['id']})) 
+            return HttpResponseRedirect(reverse('main:folder_detail', kwargs={'pk' : kwargs['id']})) 
         return HttpResponseRedirect(reverse('main:error'))
 
     def change_folder_name(request, **kwargs):
@@ -138,10 +140,9 @@ class FolderdetailView(DetailView):
             return HttpResponseRedirect(reverse('main:folderdetail', kwargs={'pk' : kwargs['id']})) 
         return HttpResponseRedirect(reverse('main:error'))
 
-    def delete_folder(request, **kwargs):
-        folder = Folder.objects.get(id=kwargs['id'])
-        folder.delete()
-        return HttpResponseRedirect(reverse('main:folders'))
+class DeleteFolderView(DeleteView):
+    model = Folder
+    success_url = reverse_lazy('main:folders')
 
 class EditTodoView(DetailView):
     model = Todo
@@ -150,7 +151,10 @@ class EditTodoView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         todo = Todo.objects.get(text=kwargs['object'])
-        context['deadline'] = todo.deadline.isoformat()
+        update_todo_form = TodoForm()
+        update_todo_form.fields['deadline'].initial = todo.deadline.isoformat()
+        update_todo_form.fields['text'].initial = todo.text
+        context['update_todo_form'] = update_todo_form
         return context
     
     def update_todo(request, **kwargs):
