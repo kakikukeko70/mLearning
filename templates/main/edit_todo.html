@@ -3,8 +3,7 @@
 {% block content %}
 <form method="POST" action="{% url 'main:update_todo' todo.pk %}">
     {% csrf_token %}
-    <input type="text" value="{{ todo }}" name="text" id="id_text" maxlength="20" autocomplete="off" required> 
-    <input type="date" value="{{ deadline }}" name="deadline" id="id_deadline" required>
+    {{ update_todo_form }}
     <button>save</button>
 </form>
 <button class="delete_todo"><a href="{% url 'main:delete_todo' todo.pk %}">delete</a></button>
