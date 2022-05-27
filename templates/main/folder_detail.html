@@ -9,7 +9,10 @@
         <button>change name</button>
     </form>
     <br>
-    <button><a href="{% url 'main:delete_folder' folder.id %}">delete folder</a></button>
+    <form method="POST" action="{% url 'main:delete_folder' folder.id %}">
+        {% csrf_token %}
+        <button>delete folder</button>
+    </form>
 </fieldset>
 <p>{{ folder }}</p>
 <form method="POST" action="{% url 'main:add_bookmark' folder.id %}">
@@ -20,7 +23,7 @@
 {% for bookmark in folder.bookmark_set.all %}
     <div class="bookmark">
         <a href="{{ bookmark.url }}">{{ bookmark }}</a>
-        <button><a href="{% url 'main:editbookmark' bookmark.id %}">edit</a></button>
+        <button><a href="{% url 'main:edit_bookmark' bookmark.id %}">edit</a></button>
     </div>
 {% endfor %}
 {% endblock %}
