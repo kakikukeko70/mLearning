@@ -9,6 +9,11 @@ from .models import User, Memo, Bookmark, Folder, Todo
 
 User = get_user_model()
 
+class UserNameForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username',)
+
 class MemoForm(forms.ModelForm):
     class Meta:
         model = Memo
@@ -16,11 +21,6 @@ class MemoForm(forms.ModelForm):
         labels = {
             'memo': '',
         }
-
-class UserNameForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ('username',)
 
 class FolderForm(forms.ModelForm):
     class Meta:
@@ -44,8 +44,18 @@ class TodoForm(forms.ModelForm):
     class Meta:
         model = Todo
         fields = ('text', 'deadline')
-        Widgets = {
-            'deadline': forms.DateInput(attrs={'type': 'date'}),
+        widgets = {
+            'deadline': forms.widgets.DateInput(attrs={'type': 'date'}),
+            'text': forms.widgets.TextInput(
+                attrs = {
+                    'placeholder': 'task',
+                    'required': True,
+                    'autocomplete': 'off'
+                })
+        }
+        labels = {
+            'text': '',
+            'deadline': '',
         }
         
 subject = "Your account is up and running!"
