@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<p>Todo List</p>
 {% for todo in user.todo_set.all %}
     <div class="todo">
         <form method="POST" action="{% url 'main:change_done' todo.id %}">
             {% csrf_token %}
             <div>
                 {% if todo.done %}
-                <input type="checkbox" name="is_done_{{ todo.id }}" id="is_done_{{ todo.id }}" checked>
+                <input type="checkbox" name="done" id="is_done" checked>
                 {% else %}
-                <input type="checkbox" name="is_done_{{ todo.id }}" id="is_done_{{ todo.id }}">
+                <input type="checkbox" name="done" id="is_done">
                 {% endif %}
-                <label for="is_done_{{ todo.id }}">{{ todo }}({{ todo.deadline }})</label>    
+                <label for="id_done">{{ todo }}({{ todo.deadline }})</label>    
                 <button>update</button> 
             </div>
         </form>
