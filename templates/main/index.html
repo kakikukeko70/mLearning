@@ -4,7 +4,7 @@
 {% block content %}
 <h3>{{ user }}</h3>
 <div class="memo">
-    <form method="POST" action="{% url 'main:update_memo' %}">
+    <form method="POST" action="{% url 'main:update_memo' user.memo.id %}">
         {% csrf_token %}
         {{ memo_form }}
         <button>update</button>
