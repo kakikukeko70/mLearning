@@ -168,6 +168,7 @@ class EditTodoView(DetailView):
 
 class UpdateTodoView(UpdateView):
     model = Todo
+    fields = ['text']
     success_url = reverse_lazy('main:todos')
 
     def form_invalid(self, form):
