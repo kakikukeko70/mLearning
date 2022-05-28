@@ -138,4 +138,4 @@ LOGOUT_REDIRECT_URL = "/login/"
 
 AUTH_USER_MODEL = 'accounts.User'
 
-FRONTEND_URL = "http://mlearn.site"
+FRONTEND_URL = env('FRONTEND_URL')

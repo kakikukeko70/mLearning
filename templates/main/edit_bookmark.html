@@ -17,5 +17,8 @@
     <button>change folder</button>
 </form>
 <br>
-<button><a href="{% url 'main:delete_bookmark' object.id %}">delete</a></button>
+<form method="POST" action="{% url 'main:delete_bookmark' object.id %}">
+    {% csrf_token %}
+    <button>delete</button>
+</form>
 {% endblock %}

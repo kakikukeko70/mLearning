@@ -2,13 +2,10 @@
 {% load static %}
 
 {% block content %}
-{% if user.username == 'test' %}
     <p style="font-size: 20px;"><strong>testuser can't change the name</strong></p>
-{% else %}
     <form method="POST" class="change_name">
         {% csrf_token %}
         {{ form.as_p }}
         <button class="change_button">change username</button>
     </form>
-{% endif %}
 {% endblock %}

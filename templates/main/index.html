@@ -4,7 +4,7 @@
 {% block content %}
 <h3>{{ user }}</h3>
 <div class="memo">
-    <form method="POST" action="{% url 'main:upload_memo' %}">
+    <form method="POST" action="{% url 'main:update_memo' user.memo.id %}">
         {% csrf_token %}
         {{ memo_form }}
         <button>update</button>
@@ -15,14 +15,13 @@
     <fieldset>
         <form method="POST" action="{% url 'main:add_todo' %}">
             {% csrf_token %}
-            <input type="text" name="text" autocomplete="off" placeholder="task" maxlength="20" required>
-            <input type="date" name="deadline" required>
+            {{ todo_form }}
             <button>add a task</button>
         </form>
         <br>
         <fieldset>
             {% for overdue in overdues %}
-                <form method="POST" action="{% url 'main:update_todo' overdue.id %}">
+                <form method="POST" action="{% url 'main:switch_done' overdue.id %}">
                     {% csrf_token %}
                         <input type="checkbox" name="is_done_{{ overdue.id }}" id="is_done_{{ overdue.id }}">
                         <label for="is_done_{{ overdue.id }}">{{ overdue }}({{ overdue.deadline }})</label>    
@@ -31,7 +30,7 @@
             {% endfor %}
             <hr>
             {% for todo in todos %}
-                <form method="POST" action="{% url 'main:update_todo' todo.id %}">
+                <form method="POST" action="{% url 'main:switch_done' todo.id %}">
                     {% csrf_token %}
                     <div>
                         {% if todo.done %}

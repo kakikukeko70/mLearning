@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
@@ -23,8 +23,6 @@ class AccountView(TemplateView):
         return context
 
     def change_username(request):
-        if request.user.username == 'test':
-            return HttpResponseRedirect(reverse('main:index'))
         form = UserNameForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -42,7 +40,12 @@ class AccountView(TemplateView):
 class CangeUserNameView(UpdateView):
     model = User
     form_class = UserNameForm
-    success_url = reverse_lazy('account')
+    success_url = reverse_lazy('accounts:account')
+
+    def get_template_names(self):
+        if self.request.user.username == 'test':
+            return ['accounts/testuser_not_allowed.html']
+        return ['accounts/user_form.html']
 
     def get_initial(self):
         return {"username": self.request.user}
@@ -50,6 +53,11 @@ class CangeUserNameView(UpdateView):
 class UserDeleteView(DeleteView):
     model = User
     success_url = reverse_lazy('login')
+
+    def get_template_names(self):
+        if self.request.user.username == 'test':
+            return ['accounts/testuser_not_allowed.html']
+        return ['accounts/user_confirm_delete.html']
 
 class SignUpView(CreateView):
     form_class = SignUpForm
@@ -65,3 +73,15 @@ class ActivateView(TemplateView):
     def get(self, request, uidb64, token, *args, **kwargs):
         result = activate_user(uidb64, token)
         return super().get(request, result=result, **kwargs)
+
+class ChangedTemplatePasswordChangeView(PasswordChangeView):
+    def get_template_names(self):
+        if self.request.user.username == 'test':
+            return ['accounts/testuser_not_allowed.html']
+        return ['registration/password_chnange_form.html'] 
+
+class ChangedTemplatePasswordResetView(PasswordResetView):
+    def get_template_names(self):
+        if self.request.user.username == 'test':
+            return ['accounts/testuser_not_allowed.html']
+        return ['registration/password_reset_form.html'] 
