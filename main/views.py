@@ -1,7 +1,7 @@
 from datetime import date
 
 from django.views.generic.base import TemplateView
-from django.views.generic import DetailView, ListView, DeleteView, UpdateView
+from django.views.generic import DetailView, ListView, DeleteView, UpdateView, CreateView
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect 
 from django.shortcuts import get_object_or_404, redirect
@@ -23,38 +23,32 @@ class IndexView(TemplateView):
         context['todos'] = todo.filter(deadline__gte=date.today()).order_by('deadline')
         context['overdues'] = todo.filter(deadline__lt=date.today(), done=False).order_by('deadline')
         return context
-
-    def update_memo(request):
-        form = MemoForm(request.POST)
-        if form.is_valid():
-            content = form.cleaned_data['memo']
-            user = get_object_or_404(User, pk=request.user.id)
-            user.memo = content
-            user.save()
-            return HttpResponseRedirect(reverse('main:index'))
-        return HttpResponseRedirect(reverse('main:error'))
-
-    def add_todo(request):
-        form = TodoForm(request.POST) 
-        if form.is_valid():
-            user = User.objects.get(pk=request.user.id)
-            todo = Todo.objects.create(
-                text=form.cleaned_data['text'], 
-                deadline=form.cleaned_data['deadline'],
-                user=user)
-            return HttpResponseRedirect(reverse('main:index'))
-        return HttpResponseRedirect(reverse('main:error'))
       
-    def switch_done(request, **kwargs):
-       is_done = request.POST.get(f"is_done_{kwargs['pk']}")
-       todo = Todo.objects.get(pk=kwargs['pk'])
-       if is_done:
-           todo.done = True
-       else:
-           todo.done = False
-       todo.save()
-       return HttpResponseRedirect(reverse('main:index'))
+class CreateTodoView(CreateView):
+    model = Todo
+    fields = ['text', 'deadline']
+    success_url = reverse_lazy('main:index')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return redirect('main:error')
+
+class UpdateMemoView(UpdateView):
+    model = Memo
+    fields = ['memo']
+    success_url = reverse_lazy('main:index')
     
+    def form_invalid(self, form):
+        return redirect('main:error')
+
+class ChangeDoneview(UpdateView):
+    model = Todo
+    fields = ['done']
+    success_url = reverse_lazy('main:index')
+
 class FolderView(TemplateView):
     template_name = 'main/folders.html'
     
@@ -63,15 +57,17 @@ class FolderView(TemplateView):
         context['folder_form'] = FolderForm()
         return context
 
-    def create_folder(request):
-        user = User(pk=request.user.id)
-        form = FolderForm(request.POST)
-        if form.is_valid():
-            folder = form.save(commit=False)
-            folder.user = user
-            folder.save()
-            return HttpResponseRedirect(reverse('main:folders'))
-        return HttpResponseRedirect(reverse('main:error'))
+class CreateFolderView(CreateView):
+    model = Folder
+    fields = ['name']
+    success_url = reverse_lazy('main:folders')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return redirect('main:error')
 
 class EditBookmark(DetailView):
     model = Bookmark
@@ -130,15 +126,28 @@ class FolderdetailView(DetailView):
             return HttpResponseRedirect(reverse('main:folder_detail', kwargs={'pk' : kwargs['id']})) 
         return HttpResponseRedirect(reverse('main:error'))
 
-    def change_folder_name(request, **kwargs):
-        folder_form = FolderForm(request.POST)
-        if folder_form.is_valid():
-            folder_name = folder_form.cleaned_data['name']
-            folder = Folder.objects.get(id=kwargs['id'])
-            folder.name = folder_name
-            folder.save()
-            return HttpResponseRedirect(reverse('main:folderdetail', kwargs={'pk' : kwargs['id']})) 
-        return HttpResponseRedirect(reverse('main:error'))
+class CreateBookmarkView(CreateView):
+    model = Bookmark
+    fields = ['name', 'url']
+
+    def get_success_url(self):
+        return reverse('main:folder_detail', kwargs={'pk': self.kwargs['id']})
+
+    def form_valid(self, form):
+        folder = Folder.objects.get(id=self.kwargs['id'])
+        form.instance.folder = folder
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class ChangeFolderName(UpdateView):
+    model = Folder
+    fields = ['name']
+
+    def get_success_url(self):
+        return reverse('main:folder_detail', kwargs={'pk': self.object.pk})
+
+    def form_invalid(self, form):
+        return redirect('main:error')
 
 class DeleteFolderView(DeleteView):
     model = Folder
@@ -156,19 +165,17 @@ class EditTodoView(DetailView):
         update_todo_form.fields['text'].initial = todo.text
         context['update_todo_form'] = update_todo_form
         return context
-    
-    def update_todo(request, **kwargs):
-        todo = Todo.objects.get(pk=kwargs['pk'])
-        todo_form = TodoForm(request.POST, instance=todo)
-        if todo_form.is_valid():
-            todo_form.save()
-            return HttpResponseRedirect(reverse('main:todos'))
-        return HttpResponseRedirect(reverse('main:error'))
 
-    def delete_todo(request, **kwargs):
-        todo = Todo.objects.get(pk=kwargs['pk'])
-        todo.delete()
-        return HttpResponseRedirect(reverse('main:index'))
+class UpdateTodoView(UpdateView):
+    model = Todo
+    success_url = reverse_lazy('main:todos')
+
+    def form_invalid(self, form):
+        return redirect('main:error')
+
+class DeleteTodoView(DeleteView):
+    model = Todo    
+    success_url = reverse_lazy('main:todos')
 
 class TodosView(ListView):
     model = Todo
@@ -177,15 +184,10 @@ class TodosView(ListView):
     def get_queryset(self):
         return Todo.objects.order_by('deadline')
 
-    def change_done(request, **kwargs):
-       is_done = request.POST.get(f"is_done_{kwargs['pk']}")
-       todo = Todo.objects.get(pk=kwargs['pk'])
-       if is_done:
-           todo.done = True
-       else:
-           todo.done = False
-       todo.save()
-       return HttpResponseRedirect(reverse('main:todos'))
+class SwitchDoneview(UpdateView):
+    model = Todo
+    fields = ['done']
+    success_url = reverse_lazy('main:todos')
        
 class ErrorView(TemplateView):
     template_name = 'error/error.html'
