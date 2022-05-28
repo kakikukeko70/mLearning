@@ -114,17 +114,17 @@ class FolderdetailView(DetailView):
         context['bookmarks'] = Bookmark.objects.filter(user=self.request.user.id)
         return context
     
-    def add_bookmark(request, **kwargs):
-        folder = Folder.objects.get(id=kwargs['id'])
-        user = User(pk=request.user.id)
-        bookmark_form = BookmarkForm(request.POST)
-        if bookmark_form.is_valid():
-            bookmark = bookmark_form.save(commit=False)
-            bookmark.user = user
-            bookmark.folder = folder
-            bookmark.save()
-            return HttpResponseRedirect(reverse('main:folder_detail', kwargs={'pk' : kwargs['id']})) 
-        return HttpResponseRedirect(reverse('main:error'))
+    # def add_bookmark(request, **kwargs):
+    #     folder = Folder.objects.get(id=kwargs['id'])
+    #     user = User(pk=request.user.id)
+    #     bookmark_form = BookmarkForm(request.POST)
+    #     if bookmark_form.is_valid():
+    #         bookmark = bookmark_form.save(commit=False)
+    #         bookmark.user = user
+    #         bookmark.folder = folder
+    #         bookmark.save()
+    #         return HttpResponseRedirect(reverse('main:folder_detail', kwargs={'pk' : kwargs['id']})) 
+    #     return HttpResponseRedirect(reverse('main:error'))
 
 class CreateBookmarkView(CreateView):
     model = Bookmark
