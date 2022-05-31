@@ -2,8 +2,6 @@ from django.contrib.auth.views import PasswordChangeView, PasswordResetView
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect 
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, get_user_model
@@ -22,20 +20,10 @@ class AccountView(TemplateView):
         context['username_form'] = username_form
         return context
 
-    def change_username(request):
-        form = UserNameForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            user = get_object_or_404(User, pk=request.user.id)
-            user.username = username
-            user.save()   
-            return HttpResponseRedirect(reverse('main:index'))
-        return HttpResponseRedirect(reverse('main:error'))
-
-    def testuser_login(request):
-        user = authenticate(request, username='test', password='testuser')
-        login(request, user)
-        return HttpResponseRedirect(reverse('main:index'))
+def testuser_login(request):
+    user = authenticate(request, username='test', password='testuser')
+    login(request, user)
+    return HttpResponseRedirect(reverse('main:index'))
 
 class CangeUserNameView(UpdateView):
     model = User
