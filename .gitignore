@@ -1,7 +1,11 @@
 venv/
 runtime.txt
+.env
 accounts/__pycache__
+accounts/migrations/
+accounts/test/__pycache__
 config/__pycache__
 main/__pycache__
-accounts/migrations/__pycache__
-.env
+main/migrations
+main/test/__pycache__
+main/views/__pycache__
