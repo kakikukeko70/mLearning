@@ -18,25 +18,25 @@ URL: http://mlearn.site/
 <h3>使用技術</h3>
 <hr>
 プログラミング言語<br>
---Python
+--Python3.10
 
 フレームワーク<br>
---Django
+--Django4.0
 
 データベース<br>
 --PostgreSQL
 
 インフラ<br>
---Linux(Ubuntu)<br>
+--Linux(Ubuntu 22.04 LTS)<br>
 --AWS(VPC, EC2, RDS, Route53, SES)<br>
---gunicorn<br>
+--Gunicorn<br>
 --Nginx<br>
 
 <h3>工夫した点</h3>
 <hr>
 GitHub Flowで開発した．<br>
 コードの可読性を意識した．（勉強中）<br>
-AWSにデプロイしてローカル環境で動いたものが本番環境でも動くか確かめた．<br>
+AWSにデプロイして本番環境で動くようにした．<br>
 テストを書いた.（途中）<br>
 
 <br>
