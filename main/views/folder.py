@@ -1,3 +1,4 @@
+import requests
 from django.views.generic.base import TemplateView
 from django.views.generic import DetailView, DeleteView, UpdateView, CreateView
 from django.urls import reverse, reverse_lazy
@@ -26,7 +27,7 @@ class CreateFolderView(CreateView):
     def form_invalid(self, form):
         return redirect('main:error')
 
-class FolderdetailView(DetailView):
+class FolderDetailView(DetailView):
     model = Folder
     template_name = 'main/folder_detail.html'
 
@@ -36,7 +37,6 @@ class FolderdetailView(DetailView):
         context['folder_form'] = FolderForm()
         context['bookmarks'] = Bookmark.objects.filter(user=self.request.user.id)
         return context
-    
 
 class CreateBookmarkView(CreateView):
     model = Bookmark
@@ -46,6 +46,10 @@ class CreateBookmarkView(CreateView):
         return reverse('main:folder_detail', kwargs={'pk': self.kwargs['id']})
 
     def form_valid(self, form):
+        try:
+            requests.get(f"{form.cleaned_data['url']}")
+        except:
+            return redirect('main:invalid_url')
         folder = Folder.objects.get(id=self.kwargs['id'])
         form.instance.folder = folder
         form.instance.user = self.request.user
@@ -64,15 +68,3 @@ class ChangeFolderName(UpdateView):
 class DeleteFolderView(DeleteView):
     model = Folder
     success_url = reverse_lazy('main:folders')
-
-# def add_bookmark(request, **kwargs):
-#     folder = Folder.objects.get(id=kwargs['id'])
-#     user = User(pk=request.user.id)
-#     bookmark_form = BookmarkForm(request.POST)
-#     if bookmark_form.is_valid():
-#         bookmark = bookmark_form.save(commit=False)
-#         bookmark.user = user
-#         bookmark.folder = folder
-#         bookmark.save()
-#         return HttpResponseRedirect(reverse('main:folder_detail', kwargs={'pk' : kwargs['id']})) 
-#     return HttpResponseRedirect(reverse('main:error'))
