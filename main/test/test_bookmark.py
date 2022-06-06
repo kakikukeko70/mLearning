@@ -20,7 +20,10 @@ class BookmarkTests(TestCase):
     
     def test_add_bookmark(self):
         self.client.login(username='test', password='testuserpass')
-        data = {'name': 'test_bookmark', 'url': 'valid_url'}
+        data = {'name': 'test_bookmark', 'url': 'https://github.com/'}
         response = self.client.post('/add_bookmark/1/', data=data, follow=True)
-        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.redirect_chain[0][0], '/folder_detail/1/')
+
+        data = {'name': 'test_bookmark', 'url': 'https://invalid.xyz/'}
+        response = self.client.post('/add_bookmark/1/', data=data, follow=True)
+        self.assertEqual(response.redirect_chain[0][0], '/invalid_url/')
