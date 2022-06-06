@@ -7,7 +7,7 @@ from accounts.models import Memo
 
 User = get_user_model()
 
-class IndexTests(TestCase):
+class TodoTests(TestCase):
 
     @classmethod 
     def setUpTestData(cls):
@@ -17,7 +17,7 @@ class IndexTests(TestCase):
         memo = Memo.objects.create(memo='', user=user)
         memo.save()
 
-    def test_add_task(self):
+    def test_add_todo(self):
         self.client.login(username='test', password='testuserpass')
         today = date.today()
         
@@ -29,11 +29,7 @@ class IndexTests(TestCase):
         data = {'text': ['統計学']}
         response = self.client.post('/add_todo/', data=data, follow=True)
         self.assertEqual(response.request['PATH_INFO'], '/error/')
-
-        # for item in dir(response):
-        #     print(item)
     
-    def update_todo(self):
+    def test_update_todo(self):
         self.client.login(username='test', password='testuserpass')
         user = User.objects.get(username='test')
-
