@@ -12,7 +12,7 @@ urlpatterns = [
     path('create_folder/', folder.CreateFolderView.as_view(), name='create_folder'),
     path('change_foldername/<int:pk>/', folder.ChangeFolderName.as_view(), name='change_folder_name'),
     path('delete_folder/<int:pk>/', folder.DeleteFolderView.as_view(), name='delete_folder'),
-    path('folder_detail/<int:pk>/', folder.FolderdetailView.as_view(), name='folder_detail'),
+    path('folder_detail/<int:pk>/', folder.FolderDetailView.as_view(), name='folder_detail'),
     path('add_bookmark/<int:id>/', folder.CreateBookmarkView.as_view(), name='add_bookmark'),
     path('edit_bookmark/<int:pk>/', bookmark.EditBookmark.as_view(), name='edit_bookmark'),
     path('change_bookmark/<int:pk>/', bookmark.ChangeBookmarkName.as_view(), name='change_bookmark_name'),
@@ -24,4 +24,5 @@ urlpatterns = [
     path('todos/', todo.TodosView.as_view(), name='todos'), 
     path('change_done/<int:pk>/', todo.SwitchDoneview.as_view(), name='change_done'),
     path('error/', error.ErrorView.as_view(), name='error'),
+    path('invalid_url/', error.InvalidUrlView.as_view(), name='invalid_url'),
 ]
