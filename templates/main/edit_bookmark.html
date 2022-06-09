@@ -10,8 +10,9 @@
 <form method="POST" action="{% url 'main:change_folder' object.id %}">
     {% csrf_token %}
     <select name="folder">
+        <option>--------</option>
         {% for folder in user.folder_set.all %}
-        <option value="{{ folder }}">{{ folder }}</option>
+        <option value="{{ folder.id }}">{{ folder }}</option>
         {% endfor %}
     </select>
     <button>change folder</button>

@@ -25,7 +25,7 @@ class ChangeBookmarkName(UpdateView):
         return redirect('main:error')
 
 class ChangeFolderView(UpdateView):
-    model = Folder
+    model = Bookmark
     fields = ['folder']
 
     def get_success_url(self):
