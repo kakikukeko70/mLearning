@@ -1,3 +1,4 @@
+import requests
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django.conf import settings
@@ -5,6 +6,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes 
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django import forms
+
 from .models import User, Memo, Bookmark, Folder, Todo
 
 User = get_user_model()
@@ -34,6 +36,15 @@ class BookmarkForm(forms.ModelForm):
     class Meta:
         model = Bookmark
         fields = ('name', 'url')
+
+    def clean_url(self):
+        try:
+            response = requests.get(f"{self.cleaned_data['url']}")
+        except:
+            raise forms.ValidationError('invalid url')
+        if response.status_code == 404:
+            raise forms.ValidationError('invalid url')
+        return self.cleaned_data['url']
 
 class BookmarkNameForm(forms.ModelForm):
    class Meta:
