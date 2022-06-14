@@ -20,7 +20,7 @@ class Folder(models.Model):
 
 class Bookmark(models.Model):
     name = models.CharField(max_length=30)
-    url = models.CharField(max_length=200)
+    url = models.URLField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE)
 
