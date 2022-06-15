@@ -40,20 +40,19 @@ class FolderDetailView(DetailView):
 
 class CreateBookmarkView(CreateView):
     model = Bookmark
-    fields = ['name', 'url']
+    form_class = BookmarkForm
 
     def get_success_url(self):
         return reverse('main:folder_detail', kwargs={'pk': self.kwargs['id']})
 
     def form_valid(self, form):
-        try:
-            requests.get(f"{form.cleaned_data['url']}")
-        except:
-            return redirect('main:invalid_url')
         folder = Folder.objects.get(id=self.kwargs['id'])
         form.instance.folder = folder
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return redirect('main:invalid_url')
 
 class ChangeFolderName(UpdateView):
     model = Folder
