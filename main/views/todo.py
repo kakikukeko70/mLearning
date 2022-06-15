@@ -37,7 +37,7 @@ class DeleteTodoView(DeleteView):
     model = Todo    
     success_url = reverse_lazy('main:todos')
 
-class SwitchDoneview(UpdateView):
+class ChangeDoneview(UpdateView):
     model = Todo
     fields = ['done']
     success_url = reverse_lazy('main:todos')
