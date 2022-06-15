@@ -7,7 +7,7 @@ urlpatterns = [
     path('', login_required(index.IndexView.as_view()), name='index'),
     path('update_memo/<int:pk>/', index.UpdateMemoView.as_view(), name='update_memo'),
     path('add_todo/', index.CreateTodoView.as_view(), name='add_todo'),
-    path('switch_done/<int:pk>/', index.ChangeDoneview.as_view(), name='switch_done'),
+    path('switch_done/<int:pk>/', index.SwitchDoneview.as_view(), name='switch_done'),
     path('bookmark_folders/', folder.FolderView.as_view(), name='folders'),
     path('create_folder/', folder.CreateFolderView.as_view(), name='create_folder'),
     path('change_foldername/<int:pk>/', folder.ChangeFolderName.as_view(), name='change_folder_name'),
@@ -22,7 +22,7 @@ urlpatterns = [
     path('update_todo/<int:pk>/', todo.UpdateTodoView.as_view(), name='update_todo'),
     path('delete_todo/<int:pk>/', todo.DeleteTodoView.as_view(), name='delete_todo'),
     path('todos/', todo.TodosView.as_view(), name='todos'), 
-    path('change_done/<int:pk>/', todo.SwitchDoneview.as_view(), name='change_done'),
+    path('change_done/<int:pk>/', todo.ChangeDoneview.as_view(), name='change_done'),
     path('error/', error.ErrorView.as_view(), name='error'),
     path('invalid_url/', error.InvalidUrlView.as_view(), name='invalid_url'),
 ]

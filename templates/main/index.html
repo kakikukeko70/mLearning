@@ -23,8 +23,8 @@
             {% for overdue in overdues %}
                 <form method="POST" action="{% url 'main:switch_done' overdue.id %}">
                     {% csrf_token %}
-                        <input type="checkbox" name="is_done_{{ overdue.id }}" id="is_done_{{ overdue.id }}">
-                        <label for="is_done_{{ overdue.id }}">{{ overdue }}({{ overdue.deadline }})</label>    
+                        <input type="checkbox" name="done" id="id_done">
+                        <label for="id_done">{{ overdue }}({{ overdue.deadline }})</label>    
                         <button>update</button> 
                 </form>
             {% endfor %}
@@ -34,11 +34,11 @@
                     {% csrf_token %}
                     <div>
                         {% if todo.done %}
-                        <input type="checkbox" name="is_done_{{ todo.id }}" id="is_done_{{ todo.id }}" checked>
+                        <input type="checkbox" name="done" id="id_done" checked>
                         {% else %}
-                        <input type="checkbox" name="is_done_{{ todo.id }}" id="is_done_{{ todo.id }}">
+                        <input type="checkbox" name="done" id="id_done">
                         {% endif %}
-                        <label for="is_done_{{ todo.id }}">{{ todo }}({{ todo.deadline }})</label>    
+                        <label for="id_done">{{ todo }}({{ todo.deadline }})</label>    
                         <button>update</button> 
                     </div>
                 </form>

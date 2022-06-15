@@ -43,7 +43,7 @@ class CreateTodoView(CreateView):
     def form_invalid(self, form):
         return redirect('main:error')
 
-class ChangeDoneview(UpdateView):
+class SwitchDoneview(UpdateView):
     model = Todo
     fields = ['done']
     success_url = reverse_lazy('main:index')
