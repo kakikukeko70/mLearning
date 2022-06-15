@@ -8,9 +8,9 @@
             {% csrf_token %}
             <div>
                 {% if todo.done %}
-                <input type="checkbox" name="done" id="is_done" checked>
+                <input type="checkbox" name="done" id="id_done" checked>
                 {% else %}
-                <input type="checkbox" name="done" id="is_done">
+                <input type="checkbox" name="done" id="id_done">
                 {% endif %}
                 <label for="id_done">{{ todo }}({{ todo.deadline }})</label>    
                 <button>update</button> 
