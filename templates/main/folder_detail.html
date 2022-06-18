@@ -15,10 +15,23 @@
     </form>
 </fieldset>
 <p>{{ folder }}</p>
-<form method="POST" action="{% url 'main:add_bookmark' folder.id %}">
+<form method="POST" action="{% url 'main:folder_detail' folder.id %}">
     {% csrf_token %}
-    {{ bookmark_form }}
-    <button>add bookmark</button>
+    {% for field in bookmark_form %}
+        {{ field.label }}
+        {{ field }}
+        {% if field.errors %}
+            {% for error in field.errors %}
+                {{ error }}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+    <button name="add_bookmark">add bookmark</button>
+    {% if bookmark_form.non_field_errors %}
+        {% for error in bookmark_form.non_field_errors %}
+            <p>{{ error }}</p>
+        {% endfor %} 
+    {% endif %}
 </form>
 {% for bookmark in folder.bookmark_set.all %}
     <div class="bookmark">
