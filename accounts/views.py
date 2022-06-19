@@ -66,7 +66,7 @@ class ChangedTemplatePasswordChangeView(PasswordChangeView):
     def get_template_names(self):
         if self.request.user.username == 'test':
             return ['accounts/testuser_not_allowed.html']
-        return ['registration/password_chnange_form.html'] 
+        return ['registration/password_change_form.html'] 
 
 class ChangedTemplatePasswordResetView(PasswordResetView):
     def get_template_names(self):

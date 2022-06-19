@@ -1,8 +1,7 @@
-import requests
 from django.views.generic.base import TemplateView
 from django.views.generic import DetailView, DeleteView, UpdateView, CreateView
 from django.urls import reverse, reverse_lazy
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 
 from accounts.models import Bookmark, Folder
 from accounts.forms import BookmarkForm, FolderForm
@@ -33,26 +32,30 @@ class FolderDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['bookmark_form'] = BookmarkForm()
+        context['bookmark_form'] = BookmarkForm() 
         context['folder_form'] = FolderForm()
         context['bookmarks'] = Bookmark.objects.filter(user=self.request.user.id)
         return context
-
-class CreateBookmarkView(CreateView):
-    model = Bookmark
-    form_class = BookmarkForm
-
-    def get_success_url(self):
-        return reverse('main:folder_detail', kwargs={'pk': self.kwargs['id']})
-
-    def form_valid(self, form):
-        folder = Folder.objects.get(id=self.kwargs['id'])
-        form.instance.folder = folder
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        return redirect('main:invalid_url')
+    
+    def post(self, request, **kwargs):
+        if 'add_bookmark' in request.POST:
+            bookmark_form = BookmarkForm(request.POST)
+            if bookmark_form.is_valid():
+                folder = Folder.objects.get(id=kwargs['pk'])
+                Bookmark.objects.create(
+                    name=bookmark_form.cleaned_data['name'], 
+                    url=bookmark_form.cleaned_data['url'], 
+                    user=request.user,
+                    folder=folder)
+            else:
+                context = {
+                    'folder': Folder.objects.get(id=kwargs['pk']),
+                    'bookmark_form': bookmark_form,
+                    'folder_form': FolderForm(),
+                    'bookmarks': Bookmark.objects.filter(user=self.request.user.id)
+                }
+                return render(request, 'main/folder_detail.html', context)
+        return redirect('main:folder_detail', pk=self.kwargs['pk'])
 
 class ChangeFolderName(UpdateView):
     model = Folder
