@@ -27,7 +27,7 @@ class MemoForm(forms.ModelForm):
 class FolderForm(forms.ModelForm):
     class Meta:
         model = Folder
-        fields = ('name', )
+        fields = ('name',)
         widgets = {
             'name': forms.TextInput(attrs={'autocomplete': 'off'})
         }
